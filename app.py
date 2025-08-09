@@ -10,7 +10,7 @@ import os
 
 app = Flask(__name__)
 
-# Variables globales para el estado del test
+# Variables globales para el estado del testtt
 test_running = False
 test_results = {}
 test_thread = None
