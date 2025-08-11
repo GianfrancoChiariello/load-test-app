@@ -5,7 +5,7 @@ services:
     build: .
     container_name: load-test-app
     ports:
-      - "5001:5001"
+      - "3005:3005"
     environment:
       - FLASK_ENV=production
       - FLASK_DEBUG=0
