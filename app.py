@@ -73,7 +73,9 @@ def get_test_status():
 def run_load_test(url, num_requests, concurrency):
     """Ejecutar la prueba de carga"""
     global test_running, test_results
-    
+
+    print(f"[{datetime.now().isoformat()}] Iniciando test de carga: {num_requests} requests a {url} con concurrencia {concurrency}")
+
     test_results = {
         'url': url,
         'num_requests': num_requests,
@@ -85,49 +87,53 @@ def run_load_test(url, num_requests, concurrency):
         'response_times': [],
         'errors': []
     }
-    
+
     def make_request(session, request_id):
         try:
             start_time = time.time()
             response = session.get(url, timeout=30)
             end_time = time.time()
-            
+
             response_time = (end_time - start_time) * 1000  # en ms
-            
+
             test_results['completed_requests'] += 1
             test_results['response_times'].append(response_time)
-            
+
+            # Log de progreso por cada request
+            print(f"[{datetime.now().isoformat()}] Request {request_id+1}/{num_requests} - Status: {response.status_code} - Tiempo: {round(response_time,2)} ms")
+
             if response.status_code == 200:
                 test_results['successful_requests'] += 1
             else:
                 test_results['failed_requests'] += 1
                 test_results['errors'].append(f"Request {request_id}: HTTP {response.status_code}")
-                
+
             return response_time, response.status_code
-            
+
         except Exception as e:
             test_results['completed_requests'] += 1
             test_results['failed_requests'] += 1
             test_results['errors'].append(f"Request {request_id}: {str(e)}")
+            print(f"[{datetime.now().isoformat()}] Request {request_id+1}/{num_requests} - ERROR: {str(e)}")
             return None, 'ERROR'
-    
+
     # Ejecutar requests con ThreadPoolExecutor
     with requests.Session() as session:
         with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as executor:
             start_time = time.time()
-            
+
             # Enviar todas las requests
             futures = [executor.submit(make_request, session, i) for i in range(num_requests)]
-            
+
             # Esperar a que terminen todas
             concurrent.futures.wait(futures)
-            
+
             end_time = time.time()
-    
+
     # Calcular estadísticas finales
     total_time = end_time - start_time
     response_times = [rt for rt in test_results['response_times'] if rt is not None]
-    
+
     if response_times:
         test_results['stats'] = {
             'total_time_seconds': round(total_time, 2),
@@ -137,10 +143,17 @@ def run_load_test(url, num_requests, concurrency):
             'max_response_time_ms': round(max(response_times), 2),
             'success_rate_percent': round((test_results['successful_requests'] / num_requests) * 100, 2)
         }
-    
+
     test_results['end_time'] = datetime.now().isoformat()
     test_running = False
-    
+
+    # Log final de resultados
+    print(f"[{datetime.now().isoformat()}] Test finalizado. Exitosos: {test_results['successful_requests']}, Fallidos: {test_results['failed_requests']}")
+    if 'stats' in test_results:
+        print(f"Estadísticas: {json.dumps(test_results['stats'], indent=2)}")
+    if test_results['errors']:
+        print(f"Errores: {test_results['errors']}")
+
     # Guardar logs
     save_test_log(test_results)
 

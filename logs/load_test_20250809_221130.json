@@ -1,0 +1,42 @@
+{
+  "url": "https://portainer.sprinfy.com",
+  "num_requests": 10,
+  "concurrency": 10,
+  "start_time": "2025-08-09T22:11:30.564644",
+  "completed_requests": 10,
+  "successful_requests": 0,
+  "failed_requests": 10,
+  "response_times": [
+    151.4739990234375,
+    151.44705772399902,
+    153.03897857666016,
+    150.99287033081055,
+    152.15420722961426,
+    152.2376537322998,
+    150.85625648498535,
+    155.62701225280762,
+    156.91804885864258,
+    156.81695938110352
+  ],
+  "errors": [
+    "Request 1: HTTP 404",
+    "Request 2: HTTP 404",
+    "Request 0: HTTP 404",
+    "Request 8: HTTP 404",
+    "Request 5: HTTP 404",
+    "Request 6: HTTP 404",
+    "Request 9: HTTP 404",
+    "Request 7: HTTP 404",
+    "Request 3: HTTP 404",
+    "Request 4: HTTP 404"
+  ],
+  "stats": {
+    "total_time_seconds": 0.16,
+    "requests_per_second": 63.22,
+    "avg_response_time_ms": 153.16,
+    "min_response_time_ms": 150.86,
+    "max_response_time_ms": 156.92,
+    "success_rate_percent": 0.0
+  },
+  "end_time": "2025-08-09T22:11:30.727521"
+}
