@@ -172,9 +172,9 @@ def save_test_log(results):
 def test_local_services():
     """Probar servicios locales del homelab"""
     services = {
-        'heimdall': 'http://192.168.1.35:8080',
-        'portainer': 'http://192.168.1.35:9000',
-        'minio_console': 'http://192.168.1.35:9001',
+        'heimdall': 'http://192.168.1.54:8080',
+        'portainer': 'http://192.168.1.54:9000',
+        'minio_console': 'http://192.168.1.54:9001',
     }
     
     results = {}
